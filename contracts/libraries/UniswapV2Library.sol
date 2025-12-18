@@ -4,6 +4,10 @@ import '@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol';
 
 import "./SafeMath.sol";
 
+interface IFactoryHelper {
+    function INIT_CODE_HASH() external view returns(bytes32);
+}
+
 library UniswapV2Library {
     using SafeMath for uint;
 
@@ -15,13 +19,14 @@ library UniswapV2Library {
     }
 
     // calculates the CREATE2 address for a pair without making any external calls
-    function pairFor(address factory, address tokenA, address tokenB) internal pure returns (address pair) {
+    function pairFor(address factory, address tokenA, address tokenB) internal view returns (address pair) {
         (address token0, address token1) = sortTokens(tokenA, tokenB);
+        IFactoryHelper fHelper = IFactoryHelper(factory);
         pair = address(uint(keccak256(abi.encodePacked(
                 hex'ff',
                 factory,
                 keccak256(abi.encodePacked(token0, token1)),
-                hex'96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f' // init code hash
+                fHelper.INIT_CODE_HASH()
             ))));
     }
 
