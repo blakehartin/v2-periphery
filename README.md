@@ -1,24 +1,32 @@
-# Uniswap V2
+# QuantumSwap V2 Periphery
 
-[![Actions Status](https://github.com/Uniswap/uniswap-v2-periphery/workflows/CI/badge.svg)](https://github.com/Uniswap/uniswap-v2-periphery/actions)
-[![npm](https://img.shields.io/npm/v/@uniswap/v2-periphery?style=flat-square)](https://npmjs.com/package/@uniswap/v2-periphery)
+Peripheral smart contracts for interacting with QuantumSwap V2 on the QuantumCoin blockchain.
 
-In-depth documentation on Uniswap V2 is available at [uniswap.org](https://uniswap.org/docs).
-
-The built contract artifacts can be browsed via [unpkg.com](https://unpkg.com/browse/@uniswap/v2-periphery@latest/).
+This is a modified fork of [Uniswap V2 periphery](https://github.com/Uniswap/v2-periphery) (GPL-3.0-or-later),
+adapted for QuantumCoin: Solidity 0.7.6, 32-byte addresses, no `ecrecover`/permit, runtime
+`INIT_CODE_HASH` lookup from the factory.
 
 # Local Development
 
-The following assumes the use of `node@>=10`.
+The following assumes the use of `node@>=18`. Contracts are compiled with the
+[`@quantumcoin/solc`](https://www.npmjs.com/package/@quantumcoin/solc) npm package
+(QuantumCoin's Solidity 0.7.6 with 32-byte address support).
 
 ## Install Dependencies
 
-`yarn`
+`npm install`
 
 ## Compile Contracts
 
-`yarn compile`
+`npm run compile`
+
+Production artifacts are built via `node scripts/build-production.js` in the `v2-core` repository,
+which compiles this router with pinned settings and generates a SHA-256 manifest.
 
 ## Run Tests
 
-`yarn test`
+`npm test`
+
+Tests run against a local QuantumCoin devnet using the `quantumcoin` SDK. The devnet is
+downloaded, installed, and started automatically by `scripts/devnet.js` (Windows, macOS, and
+Ubuntu). Overrides: `QC_RPC_URL`, `QC_DEVNET_DIR`, `QC_KEYSTORE`, `QC_KEY_PASSWORD`.

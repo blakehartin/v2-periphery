@@ -1,6 +1,8 @@
+// This contract is part of QuantumSwap V2, a modified fork of Uniswap V2 (https://github.com/Uniswap/v2-periphery)
+// adapted for the QuantumCoin blockchain. Modified from the original; see repository history for changes.
 pragma solidity >=0.6.2;
 
-interface IUniswapV2Router01 {
+interface IQuantumSwapV2Router01 {
     function factory() external returns (address);
     function WETH() external returns (address);
 
