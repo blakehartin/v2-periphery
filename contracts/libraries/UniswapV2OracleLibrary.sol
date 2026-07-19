@@ -24,12 +24,20 @@ library UniswapV2OracleLibrary {
         (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast) = IUniswapV2Pair(pair).getReserves();
         if (blockTimestampLast != blockTimestamp) {
             // subtraction overflow is desired
-            uint32 timeElapsed = blockTimestamp - blockTimestampLast;
+            uint timeElapsedWrapped;
+            assembly {
+                timeElapsedWrapped := and(sub(blockTimestamp, blockTimestampLast), 0xffffffff)
+            }
+            uint32 timeElapsed = uint32(timeElapsedWrapped);
             // addition overflow is desired
             // counterfactual
-            price0Cumulative += uint(FixedPoint.fraction(reserve1, reserve0)._x) * timeElapsed;
+            uint price0Increment = uint(FixedPoint.fraction(reserve1, reserve0)._x) * timeElapsed;
             // counterfactual
-            price1Cumulative += uint(FixedPoint.fraction(reserve0, reserve1)._x) * timeElapsed;
+            uint price1Increment = uint(FixedPoint.fraction(reserve0, reserve1)._x) * timeElapsed;
+            assembly {
+                price0Cumulative := add(price0Cumulative, price0Increment)
+                price1Cumulative := add(price1Cumulative, price1Increment)
+            }
         }
     }
 }
