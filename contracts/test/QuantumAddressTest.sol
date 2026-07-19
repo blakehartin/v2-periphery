@@ -15,14 +15,6 @@ contract QuantumAddressTest {
         return address(uint256(value));
     }
 
-    function wrappingSubtract() external pure returns (uint32) {
-        uint result;
-        assembly {
-            result := and(sub(0, 1), 0xffffffff)
-        }
-        return uint32(result);
-    }
-
     function pairFor(address factory, address tokenA, address tokenB) external view returns (address) {
         return UniswapV2Library.pairFor(factory, tokenA, tokenB);
     }
