@@ -1,8 +1,10 @@
+// This contract is part of QuantumSwap V2, a modified fork of Uniswap V2 (https://github.com/Uniswap/v2-periphery)
+// adapted for the QuantumCoin blockchain. Modified from the original; see repository history for changes.
 pragma solidity >=0.6.2;
 
-import './IUniswapV2Router01.sol';
+import './IQuantumSwapV2Router01.sol';
 
-interface IUniswapV2Router02 is IUniswapV2Router01 {
+interface IQuantumSwapV2Router02 is IQuantumSwapV2Router01 {
     function removeLiquidityETHSupportingFeeOnTransferTokens(
         address token,
         uint liquidity,

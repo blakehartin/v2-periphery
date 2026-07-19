@@ -1,6 +1,6 @@
 pragma solidity =0.7.6;
 
-import '../libraries/UniswapV2Library.sol';
+import '../libraries/QuantumSwapV2Library.sol';
 
 contract QuantumAddressTest {
     function packedAddressLength() external pure returns (uint256) {
@@ -16,6 +16,6 @@ contract QuantumAddressTest {
     }
 
     function pairFor(address factory, address tokenA, address tokenB) external view returns (address) {
-        return UniswapV2Library.pairFor(factory, tokenA, tokenB);
+        return QuantumSwapV2Library.pairFor(factory, tokenA, tokenB);
     }
 }

@@ -1,16 +1,18 @@
+// This contract is part of QuantumSwap V2, a modified fork of Uniswap V2 (https://github.com/Uniswap/v2-periphery)
+// adapted for the QuantumCoin blockchain. Modified from the original; see repository history for changes.
 pragma solidity >=0.5.0;
 
-import '@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol';
-import '@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol';
-import '@uniswap/lib/contracts/libraries/Babylonian.sol';
-import '@uniswap/lib/contracts/libraries/FullMath.sol';
+import '@quantumswap/v2-core/contracts/interfaces/IQuantumSwapV2Pair.sol';
+import '@quantumswap/v2-core/contracts/interfaces/IQuantumSwapV2Factory.sol';
+import '@quantumcoin/solidity-lib/contracts/libraries/Babylonian.sol';
+import '@quantumcoin/solidity-lib/contracts/libraries/FullMath.sol';
 
 import './SafeMath.sol';
-import './UniswapV2Library.sol';
+import './QuantumSwapV2Library.sol';
 
 // library containing some math for dealing with the liquidity shares of a pair, e.g. computing their exact value
 // in terms of the underlying tokens
-library UniswapV2LiquidityMathLibrary {
+library QuantumSwapV2LiquidityMathLibrary {
     using SafeMath for uint256;
 
     // computes the direction and magnitude of the profit-maximizing trade
@@ -48,9 +50,9 @@ library UniswapV2LiquidityMathLibrary {
         uint256 truePriceTokenB
     ) view internal returns (uint256 reserveA, uint256 reserveB) {
         // first get reserves before the swap
-        (reserveA, reserveB) = UniswapV2Library.getReserves(factory, tokenA, tokenB);
+        (reserveA, reserveB) = QuantumSwapV2Library.getReserves(factory, tokenA, tokenB);
 
-        require(reserveA > 0 && reserveB > 0, 'UniswapV2ArbitrageLibrary: ZERO_PAIR_RESERVES');
+        require(reserveA > 0 && reserveB > 0, 'QuantumSwapV2ArbitrageLibrary: ZERO_PAIR_RESERVES');
 
         // then compute how much to swap to arb to the true price
         (bool aToB, uint256 amountIn) = computeProfitMaximizingTrade(truePriceTokenA, truePriceTokenB, reserveA, reserveB);
@@ -61,11 +63,11 @@ library UniswapV2LiquidityMathLibrary {
 
         // now affect the trade to the reserves
         if (aToB) {
-            uint amountOut = UniswapV2Library.getAmountOut(amountIn, reserveA, reserveB);
+            uint amountOut = QuantumSwapV2Library.getAmountOut(amountIn, reserveA, reserveB);
             reserveA += amountIn;
             reserveB -= amountOut;
         } else {
-            uint amountOut = UniswapV2Library.getAmountOut(amountIn, reserveB, reserveA);
+            uint amountOut = QuantumSwapV2Library.getAmountOut(amountIn, reserveB, reserveA);
             reserveB += amountIn;
             reserveA -= amountOut;
         }
@@ -103,9 +105,9 @@ library UniswapV2LiquidityMathLibrary {
         address tokenB,
         uint256 liquidityAmount
     ) internal view returns (uint256 tokenAAmount, uint256 tokenBAmount) {
-        (uint256 reservesA, uint256 reservesB) = UniswapV2Library.getReserves(factory, tokenA, tokenB);
-        IUniswapV2Pair pair = IUniswapV2Pair(UniswapV2Library.pairFor(factory, tokenA, tokenB));
-        bool feeOn = IUniswapV2Factory(factory).feeTo() != address(0);
+        (uint256 reservesA, uint256 reservesB) = QuantumSwapV2Library.getReserves(factory, tokenA, tokenB);
+        IQuantumSwapV2Pair pair = IQuantumSwapV2Pair(QuantumSwapV2Library.pairFor(factory, tokenA, tokenB));
+        bool feeOn = IQuantumSwapV2Factory(factory).feeTo() != address(0);
         uint kLast = feeOn ? pair.kLast() : 0;
         uint totalSupply = pair.totalSupply();
         return computeLiquidityValue(reservesA, reservesB, totalSupply, liquidityAmount, feeOn, kLast);
@@ -124,8 +126,8 @@ library UniswapV2LiquidityMathLibrary {
         uint256 tokenAAmount,
         uint256 tokenBAmount
     ) {
-        bool feeOn = IUniswapV2Factory(factory).feeTo() != address(0);
-        IUniswapV2Pair pair = IUniswapV2Pair(UniswapV2Library.pairFor(factory, tokenA, tokenB));
+        bool feeOn = IQuantumSwapV2Factory(factory).feeTo() != address(0);
+        IQuantumSwapV2Pair pair = IQuantumSwapV2Pair(QuantumSwapV2Library.pairFor(factory, tokenA, tokenB));
         uint kLast = feeOn ? pair.kLast() : 0;
         uint totalSupply = pair.totalSupply();
 

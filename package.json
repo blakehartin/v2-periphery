@@ -1,48 +1,46 @@
 {
-  "name": "@uniswap/v2-periphery",
-  "version": "1.1.0-beta.0",
-  "description": "🎚 Peripheral smart contracts for interacting with Uniswap V2",
-  "engines": {
-    "node": ">=10"
-  },
-  "homepage": "https://uniswap.org",
+  "name": "@quantumswap/v2-periphery",
+  "version": "1.0.0",
+  "description": "Peripheral smart contracts for interacting with QuantumSwap V2 on the QuantumCoin blockchain (modified fork of @uniswap/v2-periphery)",
+  "license": "GPL-3.0-or-later",
+  "files": [
+    "contracts",
+    "!contracts/test",
+    "!contracts/examples"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Uniswap/uniswap-v2-periphery"
+    "url": "git+https://github.com/quantumswapdex/v2-periphery.git"
   },
-  "files": [
-    "build",
-    "contracts"
+  "homepage": "https://github.com/quantumswapdex/v2-periphery#readme",
+  "bugs": {
+    "url": "https://github.com/quantumswapdex/v2-periphery/issues"
+  },
+  "keywords": [
+    "quantumswap",
+    "quantumcoin",
+    "v2",
+    "periphery",
+    "quantumswap-v2"
   ],
-  "dependencies": {
-    "@uniswap/lib": "4.0.1-alpha",
-    "@uniswap/v2-core": "1.0.0"
+  "engines": {
+    "node": ">=18"
   },
-  "devDependencies": {
-    "@types/chai": "^4.2.6",
-    "@types/mocha": "^5.2.7",
-    "chai": "^4.2.0",
-    "ethereum-waffle": "^2.4.1",
-    "ethereumjs-util": "^6.2.0",
-    "mocha": "^6.2.2",
-    "ncp": "^2.0.0",
-    "prettier": "^1.19.1",
-    "rimraf": "^3.0.0",
-    "solc": "0.6.6",
-    "ts-node": "^8.5.4",
-    "typescript": "^3.7.3"
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
-    "lint": "yarn prettier ./test/*.ts --check",
-    "lint:fix": "yarn prettier ./test/*.ts --write",
-    "clean": "rimraf ./build/",
-    "copy-v1-artifacts": "ncp ./buildV1 ./build",
-    "precompile": "yarn clean",
-    "compile": "waffle .waffle.json",
-    "postcompile": "yarn copy-v1-artifacts",
-    "pretest": "yarn compile",
-    "test": "mocha",
-    "prepublishOnly": "yarn test"
+    "compile": "node scripts/compile.js",
+    "test": "npm run compile && node scripts/devnet.js ensure && node --test --test-concurrency=1",
+    "prepublishOnly": "npm run compile"
   },
-  "license": "GPL-3.0-or-later"
+  "dependencies": {
+    "@quantumcoin/solidity-lib": "file:../../solidity-lib",
+    "@quantumswap/v2-core": "file:../v2-core"
+  },
+  "devDependencies": {
+    "@quantumcoin/solc": "^0.7.6",
+    "@quantumcoin/wq": "file:../../wq",
+    "quantumcoin": "^8.0.2"
+  }
 }
